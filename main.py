@@ -1,8 +1,10 @@
 import os
 import random
 from flask import Flask, send_file, Blueprint
+from flask_cors import CORS  # Import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes in the app
 
 # Path to your 'aculei-images' directory
 image_directory = 'aculei-images-test'
@@ -40,3 +42,4 @@ app.register_blueprint(api_v1)
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
+
