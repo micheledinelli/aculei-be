@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes in the app
 
 # Path to your 'aculei-images' directory
-image_directory = 'aculei-images'
+image_directory = 'aculei-images-test'
 
 # Initialize an empty list to store image names
 image_names = []
