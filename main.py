@@ -9,7 +9,7 @@ import pandas as pd
 app = Flask(__name__)
 CORS(app)
 
-image_directory = 'aculei-images'
+image_directory = 'aculei-images-test'
 image_names = []
 
 def load_image_names():
