@@ -39,15 +39,15 @@ def get_image():
 
 def send_image_from_cam_filter(cam_number):    
     if cam_number is None:
-      return jsonify({'error': 'Please provide a valid cam_number'})
-    
+      return 'Please provide a valid cam number', 404
+        
     cam_number = str(cam_number)
 
     try:
       rows_with_cam_number = df[df['cam'] == cam_number]
     
       if len(rows_with_cam_number) == 0:
-          return jsonify({'error': 'No rows found for the given cam_number'})
+        return f'Cam {cam_number} has no images at the moment', 404
       
       random_index = random.randint(0, len(rows_with_cam_number) - 1)
       random_row = rows_with_cam_number.iloc[random_index]
@@ -63,5 +63,5 @@ app.register_blueprint(api_v1)
 Swagger(app)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=os.getenv("PORT", default=5000))
+  app.run(debug=True, port=os.getenv("PORT", default=5000))
 
