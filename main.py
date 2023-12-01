@@ -10,6 +10,8 @@ app = Flask(__name__)
 CORS(app)
 
 image_directory = 'aculei-images-test'
+csv_directory = 'aculei-test.csv'
+
 image_names = []
 
 def load_image_names():
@@ -17,7 +19,7 @@ def load_image_names():
   image_names = [f for f in os.listdir(image_directory) if f.endswith('.jpg') or f.endswith('.jpeg')]
 
 load_image_names()
-df = pd.read_csv("aculei.csv")
+df = pd.read_csv(csv_directory)
 
 api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
 
