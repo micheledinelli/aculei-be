@@ -26,7 +26,7 @@ def get_image():
     if not image_names:
       return 'No images found', 404
 
-    cam_number = request.args.get('cam-number')    
+    cam_number = request.args.get('cam')    
 
     if cam_number != None:
       return send_image_from_cam_filter(cam_number=cam_number)
