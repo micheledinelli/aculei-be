@@ -113,6 +113,22 @@ def get_image_detail(sha256):
   cleaned_data = [{k: v for k, v in item.items() if pd.notnull(v)} for item in image_data]
   return jsonify(cleaned_data[0])
 
+@api_v1.route('/clusters/<cluster>', methods=['GET'])
+def get_cluster_image(cluster):
+  df_cluster = df[df['cluster'] == float(cluster)]
+  if df_cluster.empty:
+    return "Image not found for the given SHA-256 value", 404
+
+  image_row = df_cluster.sample(1)
+  random_image_name = image_row['image_name'].iloc[0]
+  image_path = os.path.join(image_directory, random_image_name)
+
+  image_response = make_response(send_file(image_path, mimetype='image/jpg'))
+
+  image_response.headers['x-sha256'] = image_row['sha256'].iloc[0]
+  image_response.headers['Access-Control-Expose-Headers'] = 'x-sha256'
+  return image_response
+
 app.register_blueprint(api_v1)
 
 Swagger(app)
