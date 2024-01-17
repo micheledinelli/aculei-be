@@ -22,6 +22,9 @@ video_names = []
 global df 
 df = pd.read_csv(csv_directory, index_col=0)
 
+global centroid_df
+centroid_df = pd.read_csv("centroids.csv", index_col=0)
+
 def load_video_names():
   global video_names
   video_names = [f for f in os.listdir(video_directory) if f.endswith('.webm')]
@@ -98,6 +101,26 @@ def get_image():
   image_response.headers['Access-Control-Expose-Headers'] = 'x-sha256'
   return image_response
 
+@api_v1.route('/image/<sha256>')
+def get_image_by_sha(sha256):
+  image_row = df[df['sha256'] == sha256]
+
+  if image_row.empty:
+    return "Image not found for the given SHA-256 value", 404
+  
+  if image_row.shape[0] != 1:
+     return "Multiple images found for the given SHA-256 value", 404
+  
+  # Extract a random row based on the random index
+  image_name = image_row['image_name'].iloc[0]
+  image_path = os.path.join(image_directory, image_name)
+
+  image_response = make_response(send_file(image_path, mimetype='image/jpg'))
+
+  image_response.headers['x-sha256'] = image_row['sha256'].iloc[0]
+  image_response.headers['Access-Control-Expose-Headers'] = 'x-sha256'
+  return image_response
+
 @api_v1.route('/image-detail/<sha256>', methods=['GET'])
 def get_image_detail(sha256):
   image_row = df[df['sha256'] == sha256]
@@ -113,7 +136,7 @@ def get_image_detail(sha256):
   cleaned_data = [{k: v for k, v in item.items() if pd.notnull(v)} for item in image_data]
   return jsonify(cleaned_data[0])
 
-@api_v1.route('/clusters/<cluster>', methods=['GET'])
+@api_v1.route('/clusters/<cluster>/image', methods=['GET'])
 def get_cluster_image(cluster):
   df_cluster = df[df['cluster'] == float(cluster)]
   if df_cluster.empty:
@@ -129,10 +152,18 @@ def get_cluster_image(cluster):
   image_response.headers['Access-Control-Expose-Headers'] = 'x-sha256'
   return image_response
 
+@api_v1.route('/clusters/<cluster>', methods=['GET'])
+def get_cluster_details(cluster):
+  cluster_info = centroid_df.iloc[int(cluster), :]
+  print(f"Information for Cluster {cluster}:\n{cluster_info}")
+
+  data = cluster_info.to_dict()
+
+  return jsonify(data)
+
 app.register_blueprint(api_v1)
 
 Swagger(app)
 
 if __name__ == '__main__':
-  app.run(debug=True, port=os.getenv("PORT", default=5000))
-
+    app.run(debug=True, host='0.0.0.0', port=os.getenv("PORT", default=5001))
