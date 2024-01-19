@@ -14,26 +14,18 @@ CORS(app)
 
 image_directory = 'aculei-images-test'
 video_directory = 'aculei-videos'
-csv_directory = 'aculei-test.csv'
-
-image_names = []
-video_names = []
+csv_directory = './datasets'
 
 global df 
-df = pd.read_csv(csv_directory, index_col=0)
+df = pd.read_pickle(csv_directory + "/aculei-test.pkl")
 
 global centroid_df
-centroid_df = pd.read_csv("centroids.csv", index_col=0)
+centroid_df = pd.read_pickle(csv_directory + "/clusters.pkl")
 
 def load_video_names():
   global video_names
   video_names = [f for f in os.listdir(video_directory) if f.endswith('.webm')]
 
-def load_image_names():
-  global image_names
-  image_names = df['image_name']
-
-load_image_names()
 load_video_names()
 
 api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
@@ -121,7 +113,7 @@ def get_image_by_sha(sha256):
   image_response.headers['Access-Control-Expose-Headers'] = 'x-sha256'
   return image_response
 
-@api_v1.route('/image-detail/<sha256>', methods=['GET'])
+@api_v1.route('/image/<sha256>/details', methods=['GET'])
 def get_image_detail(sha256):
   image_row = df[df['sha256'] == sha256]
 
@@ -162,7 +154,6 @@ def get_cluster_details(cluster):
   return jsonify(data)
 
 app.register_blueprint(api_v1)
-
 Swagger(app)
 
 if __name__ == '__main__':
