@@ -158,6 +158,10 @@ def get_cluster_details(cluster):
 def health_check():
     return jsonify({"status": "ok"})
 
+@app.route('/', methods=['GET'])
+def default():
+    return jsonify({"hello": "from aculei-be!"})
+
 app.register_blueprint(api_v1)
 Swagger(app)
 
