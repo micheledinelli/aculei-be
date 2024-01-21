@@ -11,14 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag aculei-be
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # Login to Docker Hub using Docker API access token
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag micheledinelli/aculei-be:latest
+
+      - name: List local Docker images
+        run: docker images
+
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_ACCESS_TOKEN }}" | docker login -u "micheledinelli" --password-stdin docker.io
 
-      # Push the Docker image
       - name: Push Docker image
-        run: docker push micheledinelli/aculei-be
+        run: docker push micheledinelli/aculei-be:latest
