@@ -154,6 +154,10 @@ def get_cluster_details(cluster):
 
   return jsonify(data)
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "ok"})
+
 app.register_blueprint(api_v1)
 Swagger(app)
 
