@@ -30,5 +30,9 @@ jobs:
     needs: build
 
     steps:
-      - name: Triggering deploy
-        run: curl "${{ secrets.RENDER_DEPLOY_HOOK }}"
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST -H "Authorization: Bearer ${{ secrets.RENDER_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"services": ["aculei-be"]}' \
+          https://api.render.com/v1/deploys
