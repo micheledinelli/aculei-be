@@ -20,6 +20,9 @@ jobs:
       - name: List local Docker images
         run: docker images
 
+  push:
+    runs-on: ubuntu-latest
+    steps:
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_ACCESS_TOKEN }}" | docker login -u "micheledinelli" --password-stdin docker.io
 
