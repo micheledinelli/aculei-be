@@ -27,6 +27,7 @@ jobs:
         run: docker push micheledinelli/aculei-be:latest
   deploy:
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Triggering deploy
