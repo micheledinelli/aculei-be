@@ -11,7 +11,7 @@ from .landing import routes as landing_routes
 from .experience import routes as experience_routes
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 swagger = Swagger(app)
 
 app.config['APPLICATION_ROOT'] = '/api/v1/'
