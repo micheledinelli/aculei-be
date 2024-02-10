@@ -51,6 +51,3 @@ def health_check():
         description: Service status
     """
     return jsonify({"health": "up"})
-
-if __name__ == '__main__':
-    app.run()
