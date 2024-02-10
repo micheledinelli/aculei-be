@@ -1,6 +1,5 @@
 from flask import Flask
 from flask import jsonify
-from flask_cors import CORS 
 from flasgger import Swagger
 
 import logging
