@@ -3,6 +3,7 @@ import random
 import re
 from flask import Blueprint, Response, request, send_file
 from flask import jsonify
+from app.db import df
 
 import logging
 
@@ -27,9 +28,15 @@ def get_random_image():
         description: Server error
     """
     try:
-        image_name = random.choice(image_names)
-        image_path = os.path.join("db/static/selecta", image_name)
-        return send_file(image_path, mimetype='image/webp')
+        random_row = df.sample(1)
+        sha_256 = random_row['sha256'].values[0]
+
+        # With the sha256 retrieve the image from the selecta
+        
+        # image_path = os.path.join("db/static/selecta", image_name)
+        # response = send_file(image_path, mimetype='image/webp')
+        # response.headers['x-sha256'] = '*'
+        return jsonify({'image': "image"})
     except Exception as e:
         logger.exception('An exception occurred during a request.', str(e))
         return jsonify({'error': 'error in getting random selecta image'})
