@@ -1,8 +1,9 @@
 from flask import Flask
 from flask import jsonify
-import logging
-
+from flask_cors import CORS 
 from flasgger import Swagger
+
+import logging
 
 from app.utils.exceptions import CustomException
 
@@ -10,6 +11,7 @@ from .landing import routes as landing_routes
 from .experience import routes as experience_routes
 
 app = Flask(__name__)
+CORS(app)
 swagger = Swagger(app)
 
 app.config['APPLICATION_ROOT'] = '/api/v1/'
