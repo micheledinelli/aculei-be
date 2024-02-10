@@ -4,13 +4,16 @@ from flasgger import Swagger
 
 import logging
 
+from flask_cors import CORS
+
 from app.utils.exceptions import CustomException
 
 from .landing import routes as landing_routes
 from .experience import routes as experience_routes
+from .archive import routes as archive_routes
 
 app = Flask(__name__)
-# CORS(app)
+CORS(app)
 swagger = Swagger(app)
 
 app.config['APPLICATION_ROOT'] = '/api/v1/'
@@ -18,6 +21,7 @@ app.config['APPLICATION_ROOT'] = '/api/v1/'
 # Registering blueprints
 app.register_blueprint(landing_routes.landing_bp, url_prefix=app.config['APPLICATION_ROOT'])
 app.register_blueprint(experience_routes.experience_bp, url_prefix=app.config['APPLICATION_ROOT'])
+app.register_blueprint(archive_routes.archive_bp, url_prefix=app.config['APPLICATION_ROOT'])
 
 # Configure Flask logging
 app.logger.setLevel(logging.INFO)

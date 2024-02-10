@@ -28,8 +28,9 @@ def get_filters():
         description: Server error
     """
     try:
-        filters = df.columns.tolist()
-        return jsonify({'filters': filters})
+        filters_labels = df.columns.tolist()
+
+        return jsonify({'filters': filters_labels})
     except Exception as e:
         logger.exception('An exception occurred during a request.', str(e))
         return jsonify({'error': 'error in getting filters'})
