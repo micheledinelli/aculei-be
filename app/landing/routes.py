@@ -50,7 +50,6 @@ def get_camera(camera_id=None):
         - name: camera_id
           in: path
           type: int
-          
     responses:
       200:
         description: Camera detail
@@ -91,7 +90,40 @@ def df_stats():
         description: Server error
     """
     try:
-        return df.animal.value_counts().to_dict()
+        # Animals
+        animals = df.animal.value_counts().to_dict()
+
+        # Cameras
+        cameras = df.hunter_camera.value_counts().to_dict()
+
+        # Moon phases
+        moon_phases = df.moon_phase.value_counts().to_dict()
+
+        # Temperature
+        temp_max = df.temperature.max()
+        temp_min = df.temperature.min()
+
+        # Total records
+        total_records = df.shape[0]
+
+        # Photos by season
+        seasons = df.season.value_counts().to_dict()
+
+        # Photos by moon phase
+        moon_phases = df.moon_phase.value_counts().to_dict()
+
+        # Merge all dictionary in one
+        data = {
+            'animals': animals,
+            'cameras': cameras,
+            'moon_phases': moon_phases,
+            'temperature': {'min': temp_min, 'max': temp_max},
+            'total_records': total_records,
+            'seasons': seasons,
+            'moon_phases': moon_phases
+        }
+        
+        return data
     except Exception as e:
         logger.exception('An exception occurred during a request.', str(e))
         return CustomException('Error', 500)
