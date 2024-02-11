@@ -75,8 +75,8 @@ def get_filters():
         logger.exception('An exception occurred during a request.', str(e))
         return jsonify({'error': 'error in getting filters'})
 
-@archive_bp.route('archive/images', methods=['GET'])
-def get_filtered_images():
+@archive_bp.route('archive/images/<filter>', methods=['GET'])
+def get_filtered_images(filter=None):
     """
     Return the images according to the filters
     ---
@@ -84,7 +84,7 @@ def get_filtered_images():
         - images
     responses:
       200:
-        description: A random image
+        description: Filtered images
       500:
         description: Server error
     """
