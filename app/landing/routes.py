@@ -1,6 +1,7 @@
 import os
 import random
 import re
+import pandas as pd
 from flask import Blueprint, Response, request
 from flask import jsonify
 import logging
@@ -99,10 +100,6 @@ def df_stats():
         # Moon phases
         moon_phases = df.moon_phase.value_counts().to_dict()
 
-        # Temperature
-        temp_max = df.temperature.max()
-        temp_min = df.temperature.min()
-
         # Total records
         total_records = df.shape[0]
 
@@ -112,17 +109,26 @@ def df_stats():
         # Photos by moon phase
         moon_phases = df.moon_phase.value_counts().to_dict()
 
-        # Merge all dictionary in one
-        data = {
-            'animals': animals,
-            'cameras': cameras,
-            'moon_phases': moon_phases,
-            'temperature': {'min': temp_min, 'max': temp_max},
-            'total_records': total_records,
-            'seasons': seasons,
-            'moon_phases': moon_phases
-        }
+        data = {} 
+        for key, value in animals.items():
+            data[str(key)] = value
+
+        for index, row in camera_df.iterrows():
+            if pd.isna(row['coordinates']):
+                continue
+            data['coordinates of camera ' + str(row['hunter_camera'])] = row['coordinates']
+
+        for key, value in cameras.items():
+            data['photos by hunter camera ' + str(key)] = str(value)
+
+        for key, value in moon_phases.items():
+            data['photos during moon ' + str(key)] = str(value)
         
+        data['total records in the dataset'] = total_records
+
+        for key, value in seasons.items():
+            data['photos during ' + str(key)] = str(value)
+
         return data
     except Exception as e:
         logger.exception('An exception occurred during a request.', str(e))
