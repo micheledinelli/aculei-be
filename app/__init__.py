@@ -16,12 +16,19 @@ app = Flask(__name__)
 
 app.config['APPLICATION_ROOT'] = '/api/v1/'
 
+landing_bp = landing_routes.landing_bp
+experience_bp = experience_routes.experience_bp
+archive_bp = archive_routes.archive_bp
+
 # Registering blueprints
 app.register_blueprint(landing_routes.landing_bp, url_prefix=app.config['APPLICATION_ROOT'])
 app.register_blueprint(experience_routes.experience_bp, url_prefix=app.config['APPLICATION_ROOT'])
 app.register_blueprint(archive_routes.archive_bp, url_prefix=app.config['APPLICATION_ROOT'])
 
 CORS(app)
+CORS(landing_bp)
+CORS(experience_bp)
+
 Swagger(app)
 
 # Configure Flask logging
