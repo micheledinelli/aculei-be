@@ -8,7 +8,7 @@ from app.utils.exceptions import CustomException
 import logging
 
 logger = logging.getLogger(__name__)
-experience_bp = Blueprint('experience_bp', __name__)
+experience_bp = Blueprint('experience_bp', __name__, url_prefix='/api/v1')
 
 CORS(experience_bp)
 

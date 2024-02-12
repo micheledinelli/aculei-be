@@ -9,7 +9,7 @@ from app.db import df
 import logging
 
 logger = logging.getLogger(__name__)
-archive_bp = Blueprint('archive_bp', __name__)
+archive_bp = Blueprint('archive_bp', __name__, url_prefix='/api/v1')
 
 # Get the video names and directory
 selecta_directory = 'app/db/static/selecta'

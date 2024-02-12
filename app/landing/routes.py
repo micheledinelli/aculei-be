@@ -11,7 +11,7 @@ from app.db import camera_df
 from app.utils.exceptions import CustomException
 
 logger = logging.getLogger(__name__)
-landing_bp = Blueprint('landing_bp', __name__)
+landing_bp = Blueprint('landing_bp', __name__, url_prefix='/api/v1')
 
 # Get the video names and directory
 video_directory = 'app/db/static/videos'
