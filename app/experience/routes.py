@@ -59,17 +59,28 @@ def get_image(image_id=None):
         description: Server error
     """
     try:
-        image_row = selecta_df[selecta_df['image_name'] == image_id]
-        if image_row.empty:
-          image_row = selecta_df[selecta_df['sha256'] == image_id]
+      image_row = selecta_df[selecta_df['image_name'] == image_id]
+      if image_row.empty:
+        image_row = selecta_df[selecta_df['sha256'] == image_id]
 
-        if image_row.empty:
-          raise CustomException('Image not found', 404)
-        
-        # Handle Nan values filling with null
-        image_row = image_row.fillna('null')
+      if image_row.empty:
+        raise CustomException('Image not found', 404)
+      # Keep the first row
+      image_row = image_row.head(1)
+      
+      # Handle Nan values filling with null
+      image_row = image_row.fillna('null')
 
-        return image_row.to_dict(orient='records')
+      # Convert the DataFrame to a dictionary
+      image_dict = image_row.to_dict(orient='records')
+
+      # If the DataFrame was not empty, image_dict will be a list with one dictionary.
+      # We return this dictionary. If the DataFrame was empty, we return an empty dictionary.
+      if image_dict:
+        return image_dict[0]
+      else:
+        raise CustomException('Image not found', 404)
+    
     except Exception as e:
         logger.exception('An exception occurred during a request.', str(e))
         return jsonify({'error': 'error in getting random selecta image'})
