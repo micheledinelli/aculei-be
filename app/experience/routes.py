@@ -10,6 +10,8 @@ import logging
 logger = logging.getLogger(__name__)
 experience_bp = Blueprint('experience_bp', __name__)
 
+CORS(experience_bp)
+
 # Get the video names and directory
 selecta_directory = 'app/db/static/selecta'
 image_names = os.listdir(selecta_directory)
