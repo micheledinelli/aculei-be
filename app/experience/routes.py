@@ -1,15 +1,16 @@
 import os
-import random
-import re
-from flask import Blueprint, Response, request, send_file
+from flask import Blueprint, send_file
+from flask_cors import CORS
+
 from flask import jsonify
-from app.db import df
 from app.db import selecta_df
 from app.utils.exceptions import CustomException
 import logging
 
 logger = logging.getLogger(__name__)
 experience_bp = Blueprint('experience_bp', __name__)
+
+CORS(experience_bp)
 
 # Get the video names and directory
 selecta_directory = 'app/db/static/selecta'
