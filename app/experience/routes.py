@@ -36,6 +36,7 @@ def get_random_selecta_image():
         image_path = os.path.join("db/static/selecta", image_name + '.webp')
         response = send_file(image_path, mimetype='image/webp')
         response.headers['x-sha256'] = sha_256
+        response.headers['Access-Control-Expose-Headers'] = 'x-sha256'
         response.headers['x-image-name'] = image_name
         return response
     except Exception as e:
