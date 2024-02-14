@@ -75,10 +75,14 @@ def get_image(image_id=None):
       # Convert the DataFrame to a dictionary
       image_dict = image_row.to_dict(orient='records')
 
+      data_to_keep = ['animal', 'temperature', 'moon_phase', 'date_time', 'hunter_camera']
+
       # If the DataFrame was not empty, image_dict will be a list with one dictionary.
       # We return this dictionary. If the DataFrame was empty, we return an empty dictionary.
       if image_dict:
-        return image_dict[0]
+        image = image_dict[0]
+        image = {k: v for k, v in image.items() if k in data_to_keep and v != 'null'}
+        return image
       else:
         raise CustomException('Image not found', 404)
     
